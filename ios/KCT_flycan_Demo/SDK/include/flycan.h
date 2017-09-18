@@ -25,14 +25,14 @@ typedef enum {
     EVT_SESSION_INCOMING = 6,//会话连接请求事件
     EVT_PACKET_RCVD = 7,//会话数据接收事件
     EVT_SESSION_DISCONNED = 8,//会话已经断开事件
-    EVT_UNREGISTER = 9,//注销成功
+    EVT_UNREGISTER = 9,
 }FlycanEventType;
 
 
 @protocol flycanDelegate <NSObject>
 
 - (void)flycanEvent:(FlycanEventType)eventType;
-- (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channel:(int)channel_indxe;
+- (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe;
 
 @end
 
@@ -47,7 +47,7 @@ typedef enum {
  输出参数：
  返回StateCodeSuccess:成功，StateCodeFail:失败
  */
-- (void)flycan_init:(NSString *)sid token:(NSString *)token appid:(NSString *)appid sdkid:(NSString *)sdkid;
+- (void)flycanInit:(NSString *)sid token:(NSString *)token appid:(NSString *)appid sdkid:(NSString *)sdkid;
 
 /*
  功能: 向flyCan注册，结果通过回调异步返回
@@ -59,46 +59,47 @@ typedef enum {
  EVT_REGISTER_FAILURE		失败
 
  */
-- (void)flycan_register;
+- (void)flycanRegister;
 
 /*
  
  */
-- (int)flycan_create_session:(TransportProtocol)protocol;
+- (int)flycanCreateSession:(TransportProtocol)protocol;
 
 /*
  
  */
-- (void)flycan_session_listen:(int)sessionId session_num:(int)session_num;
+- (void)flycanSessionListen:(int)sessionId sessionNum:(int)sessionNum;
 
 /*
  
  */
-- (void)flycan_connect_session:(int)sessionId peerId:(NSString *)peerId;
+- (void)flycanConnectSession:(int)sessionId peerId:(NSString *)peerId;
 
 /*
  
  */
-- (int)flycan_accept_session:(int)sessionId;
+- (int)flycanAcceptSession:(int)sessionId;
 
 /*
  
  */
-- (void)flycan_reject_session:(int)sessionId;
+- (void)flycanRejectSession:(int)sessionId;
 
 /*
  
  */
-- (int)flycan_send:(int)sessionId data:(NSData *)data len:(NSInteger)len port_index:(NSInteger)port_index;
+- (int)flycanSend:(int)sessionId data:(NSData *)data len:(NSInteger)len channelIndex:(NSInteger)channelIndex;
 
 /*
  
  */
-- (void)flycan_release_session:(int)sessionId;
+- (void)flycanReleaseSession:(int)sessionId;
 
 /*
  功能: SDK发送注销请求,断开和flyCan的连接
  */
-- (void)flycan_unRegister;
+- (void)flycanUnRegister;
+- (void)flycanUnInit;
 
 @end
