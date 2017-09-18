@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A35DC651F66920900360FFE /* DataEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC601F66920900360FFE /* DataEncryption.m */; };
+		5A35DC661F66920900360FFE /* HttpRequestEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC621F66920900360FFE /* HttpRequestEngine.m */; };
+		5A35DC671F66920900360FFE /* TimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC641F66920900360FFE /* TimeUtil.m */; };
+		5A35DC6E1F6694CA00360FFE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC6B1F6694CA00360FFE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5A35DC6F1F6694CA00360FFE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC6D1F6694CA00360FFE /* README.md */; };
+		5A4EB01D1F4ECDBE00083295 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB01C1F4ECDBE00083295 /* main.m */; };
+		5A4EB0201F4ECDBE00083295 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB01F1F4ECDBE00083295 /* AppDelegate.m */; };
+		5A4EB0231F4ECDBE00083295 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB0221F4ECDBE00083295 /* ViewController.m */; };
+		5A4EB0261F4ECDBE00083295 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0241F4ECDBE00083295 /* Main.storyboard */; };
+		5A4EB0281F4ECDBE00083295 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0271F4ECDBE00083295 /* Assets.xcassets */; };
+		5A4EB02B1F4ECDBE00083295 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0291F4ECDBE00083295 /* LaunchScreen.storyboard */; };
+		5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4EB0361F4EEDBE00083295 /* libflycan.a */; };
+		5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4FFB851F56B11400F841BC /* libstdc++.tbd */; };
+		5A9BC3921F6F9E8100C2453A /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A9BC3911F6F9E8100C2453A /* libflycan.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5A35DC5F1F66920900360FFE /* DataEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataEncryption.h; sourceTree = "<group>"; };
+		5A35DC601F66920900360FFE /* DataEncryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataEncryption.m; sourceTree = "<group>"; };
+		5A35DC611F66920900360FFE /* HttpRequestEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestEngine.h; sourceTree = "<group>"; };
+		5A35DC621F66920900360FFE /* HttpRequestEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRequestEngine.m; sourceTree = "<group>"; };
+		5A35DC631F66920900360FFE /* TimeUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeUtil.h; sourceTree = "<group>"; };
+		5A35DC641F66920900360FFE /* TimeUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeUtil.m; sourceTree = "<group>"; };
+		5A35DC6A1F6694CA00360FFE /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		5A35DC6B1F6694CA00360FFE /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		5A35DC6C1F6694CA00360FFE /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		5A35DC6D1F6694CA00360FFE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5A4EB0181F4ECDBE00083295 /* KCT_flycan_Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KCT_flycan_Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A4EB01C1F4ECDBE00083295 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5A4EB01E1F4ECDBE00083295 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5A4EB01F1F4ECDBE00083295 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5A4EB0211F4ECDBE00083295 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5A4EB0221F4ECDBE00083295 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5A4EB0251F4ECDBE00083295 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5A4EB0271F4ECDBE00083295 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5A4EB02A1F4ECDBE00083295 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5A4EB02C1F4ECDBE00083295 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A4EB0341F4EED9200083295 /* flycan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flycan.h; sourceTree = "<group>"; };
+		5A4EB0361F4EEDBE00083295 /* libflycan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libflycan.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Flycan-bfxyrkpqjjlllxdzfdyefolphftw/Build/Products/Debug-iphoneos/libflycan.a"; sourceTree = "<group>"; };
+		5A4EB0391F4EEE2C00083295 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		5A4EB03A1F4EEE9E00083295 /* AppHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppHeaders.h; sourceTree = "<group>"; };
+		5A4FFB851F56B11400F841BC /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		5A9BC3911F6F9E8100C2453A /* libflycan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libflycan.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A4EB0151F4ECDBE00083295 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */,
+				5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */,
+				5A9BC3921F6F9E8100C2453A /* libflycan.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A35DC5D1F66920000360FFE /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5A35DC5E1F66920900360FFE /* Util */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		5A35DC5E1F66920900360FFE /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				5A35DC5F1F66920900360FFE /* DataEncryption.h */,
+				5A35DC601F66920900360FFE /* DataEncryption.m */,
+				5A35DC611F66920900360FFE /* HttpRequestEngine.h */,
+				5A35DC621F66920900360FFE /* HttpRequestEngine.m */,
+				5A35DC631F66920900360FFE /* TimeUtil.h */,
+				5A35DC641F66920900360FFE /* TimeUtil.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		5A35DC681F6694CA00360FFE /* Third-party */ = {
+			isa = PBXGroup;
+			children = (
+				5A35DC691F6694CA00360FFE /* GTMBase64-master */,
+			);
+			path = "Third-party";
+			sourceTree = "<group>";
+		};
+		5A35DC691F6694CA00360FFE /* GTMBase64-master */ = {
+			isa = PBXGroup;
+			children = (
+				5A35DC6A1F6694CA00360FFE /* GTMBase64.h */,
+				5A35DC6B1F6694CA00360FFE /* GTMBase64.m */,
+				5A35DC6C1F6694CA00360FFE /* GTMDefines.h */,
+				5A35DC6D1F6694CA00360FFE /* README.md */,
+			);
+			path = "GTMBase64-master";
+			sourceTree = "<group>";
+		};
+		5A4EB00F1F4ECDBE00083295 = {
+			isa = PBXGroup;
+			children = (
+				5A4EB0321F4EED9200083295 /* SDK */,
+				5A4EB01A1F4ECDBE00083295 /* KCT_flycan_Demo */,
+				5A4EB0191F4ECDBE00083295 /* Products */,
+				5A4EB0351F4EEDBE00083295 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5A4EB0191F4ECDBE00083295 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A4EB0181F4ECDBE00083295 /* KCT_flycan_Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A4EB01A1F4ECDBE00083295 /* KCT_flycan_Demo */ = {
+			isa = PBXGroup;
+			children = (
+				5A35DC681F6694CA00360FFE /* Third-party */,
+				5A35DC5D1F66920000360FFE /* Common */,
+				5A4EB0381F4EEE1B00083295 /* Config */,
+				5A4EB01E1F4ECDBE00083295 /* AppDelegate.h */,
+				5A4EB01F1F4ECDBE00083295 /* AppDelegate.m */,
+				5A4EB0211F4ECDBE00083295 /* ViewController.h */,
+				5A4EB0221F4ECDBE00083295 /* ViewController.m */,
+				5A4EB0241F4ECDBE00083295 /* Main.storyboard */,
+				5A4EB0271F4ECDBE00083295 /* Assets.xcassets */,
+				5A4EB0291F4ECDBE00083295 /* LaunchScreen.storyboard */,
+				5A4EB02C1F4ECDBE00083295 /* Info.plist */,
+				5A4EB01B1F4ECDBE00083295 /* Supporting Files */,
+			);
+			path = KCT_flycan_Demo;
+			sourceTree = "<group>";
+		};
+		5A4EB01B1F4ECDBE00083295 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5A4EB01C1F4ECDBE00083295 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5A4EB0321F4EED9200083295 /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				5A9BC3901F6F9E8100C2453A /* lib */,
+				5A4EB0331F4EED9200083295 /* include */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
+		5A4EB0331F4EED9200083295 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5A4EB0341F4EED9200083295 /* flycan.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		5A4EB0351F4EEDBE00083295 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5A4FFB851F56B11400F841BC /* libstdc++.tbd */,
+				5A4EB0361F4EEDBE00083295 /* libflycan.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5A4EB0381F4EEE1B00083295 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5A4EB0391F4EEE2C00083295 /* PrefixHeader.pch */,
+				5A4EB03A1F4EEE9E00083295 /* AppHeaders.h */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		5A9BC3901F6F9E8100C2453A /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				5A9BC3911F6F9E8100C2453A /* libflycan.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A4EB0171F4ECDBE00083295 /* KCT_flycan_Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A4EB02F1F4ECDBE00083295 /* Build configuration list for PBXNativeTarget "KCT_flycan_Demo" */;
+			buildPhases = (
+				5A4EB0141F4ECDBE00083295 /* Sources */,
+				5A4EB0151F4ECDBE00083295 /* Frameworks */,
+				5A4EB0161F4ECDBE00083295 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KCT_flycan_Demo;
+			productName = KCT_flycan_Demo;
+			productReference = 5A4EB0181F4ECDBE00083295 /* KCT_flycan_Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A4EB0101F4ECDBE00083295 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = flypass;
+				TargetAttributes = {
+					5A4EB0171F4ECDBE00083295 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = NSUMRZX66K;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5A4EB0131F4ECDBE00083295 /* Build configuration list for PBXProject "KCT_flycan_Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5A4EB00F1F4ECDBE00083295;
+			productRefGroup = 5A4EB0191F4ECDBE00083295 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A4EB0171F4ECDBE00083295 /* KCT_flycan_Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A4EB0161F4ECDBE00083295 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A4EB02B1F4ECDBE00083295 /* LaunchScreen.storyboard in Resources */,
+				5A4EB0281F4ECDBE00083295 /* Assets.xcassets in Resources */,
+				5A4EB0261F4ECDBE00083295 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A4EB0141F4ECDBE00083295 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A35DC651F66920900360FFE /* DataEncryption.m in Sources */,
+				5A4EB0231F4ECDBE00083295 /* ViewController.m in Sources */,
+				5A35DC671F66920900360FFE /* TimeUtil.m in Sources */,
+				5A4EB0201F4ECDBE00083295 /* AppDelegate.m in Sources */,
+				5A4EB01D1F4ECDBE00083295 /* main.m in Sources */,
+				5A35DC661F66920900360FFE /* HttpRequestEngine.m in Sources */,
+				5A35DC6F1F6694CA00360FFE /* README.md in Sources */,
+				5A35DC6E1F6694CA00360FFE /* GTMBase64.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5A4EB0241F4ECDBE00083295 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A4EB0251F4ECDBE00083295 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5A4EB0291F4ECDBE00083295 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A4EB02A1F4ECDBE00083295 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5A4EB02D1F4ECDBE00083295 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5A4EB02E1F4ECDBE00083295 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A4EB0301F4ECDBE00083295 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NSUMRZX66K;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = KCT_flycan_Demo/Config/PrefixHeader.pch;
+				INFOPLIST_FILE = KCT_flycan_Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDK/lib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "KCT.KCT-flycan-Demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5A4EB0311F4ECDBE00083295 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NSUMRZX66K;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = KCT_flycan_Demo/Config/PrefixHeader.pch;
+				INFOPLIST_FILE = KCT_flycan_Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDK/lib",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "KCT.KCT-flycan-Demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A4EB0131F4ECDBE00083295 /* Build configuration list for PBXProject "KCT_flycan_Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A4EB02D1F4ECDBE00083295 /* Debug */,
+				5A4EB02E1F4ECDBE00083295 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A4EB02F1F4ECDBE00083295 /* Build configuration list for PBXNativeTarget "KCT_flycan_Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A4EB0301F4ECDBE00083295 /* Debug */,
+				5A4EB0311F4ECDBE00083295 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5A4EB0101F4ECDBE00083295 /* Project object */;
+}
