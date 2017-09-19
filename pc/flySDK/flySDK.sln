@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flySDK", "flySDK.vcxproj", "{32601CEF-CDDE-423B-8139-3990729A08EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "json", "json\json.vcxproj", "{F5001A12-64E9-4033-8B24-6A52B8FF8513}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flyDemo", "..\flyDemo\flyDemo.vcxproj", "{1BF2B985-B210-4C28-9955-5FE1CD85283E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Debug|x64.ActiveCfg = Debug|x64
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Debug|x64.Build.0 = Debug|x64
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Debug|x86.ActiveCfg = Debug|Win32
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Debug|x86.Build.0 = Debug|Win32
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Release|x64.ActiveCfg = Release|x64
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Release|x64.Build.0 = Release|x64
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Release|x86.ActiveCfg = Release|Win32
+		{32601CEF-CDDE-423B-8139-3990729A08EF}.Release|x86.Build.0 = Release|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Debug|x64.ActiveCfg = Debug|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Debug|x86.ActiveCfg = Debug|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Debug|x86.Build.0 = Debug|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Release|x64.ActiveCfg = Release|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Release|x86.ActiveCfg = Release|Win32
+		{F5001A12-64E9-4033-8B24-6A52B8FF8513}.Release|x86.Build.0 = Release|Win32
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Debug|x64.ActiveCfg = Debug|x64
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Debug|x64.Build.0 = Debug|x64
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Debug|x86.Build.0 = Debug|Win32
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Release|x64.ActiveCfg = Release|x64
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Release|x64.Build.0 = Release|x64
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Release|x86.ActiveCfg = Release|Win32
+		{1BF2B985-B210-4C28-9955-5FE1CD85283E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
