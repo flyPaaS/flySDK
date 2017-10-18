@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">flyCan</string>
+    <string name="app_text_name1">主叫：</string>
+    <string name="app_text_name2">被叫：</string>
+    <string name="app_text_hint_name1">请输入主叫号码</string>
+    <string name="app_text_hint_name2">请输入被叫号码</string>
+    <string name="app_text_value1">62395051197525</string>
+    <string name="app_text_value2">62395051197526</string>
+    <string name="app_text_btn_reg">register</string>
+    <string name="app_text_btn_crt">create session</string>
+    <string name="app_text_btn_con">connect session</string>
+    <string name="app_text_btn_send">send data</string>
+    <string name="app_text_btn_uncon">disconnect session</string>
+    <string name="app_text_btn_unreg">unregister</string>
+</resources>
