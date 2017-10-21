@@ -76,6 +76,9 @@ DLL_EXPORT_IMPORT bool FlyCanRejectSession(void *handle);
 // 发送数据(接收数据通过回调返回)
 DLL_EXPORT_IMPORT bool FlyCanSend(void *handle, void *pData, int nLen, int nChannalId);
 
+// 直接连接对应的地址
+DLL_EXPORT_IMPORT int FlyCanConnectServer(void *handle, char *ip, int port);
+
 
 
 

@@ -3,12 +3,16 @@
 
 #include "stdafx.h"
 #include <string>
+#include <vector>
 
-#include "./flySDK.h"
-#pragma comment(lib, "./flySDK.lib")
+#include "../flySDK/flySDK.h"
+#pragma comment(lib, "../flySDK/output/flySDK.lib")
 
 int nMaxChannal = 0;
-HANDLE dwHandle = NULL;
+bool bClient = false;
+HANDLE dwHandleServer = NULL;
+HANDLE dwHandleClient = NULL;
+std::vector<HANDLE> vtList;
 void CallBackEventCB(int nEvent, int nCode, void *pData);
 void CallBackRecvCB(void* pHandle, void *pData, int nLen, int nChannalId);
 
@@ -27,7 +31,7 @@ int main()
 	pCallBack->event_cb = CallBackEventCB;
 	pCallBack->recv_cb = CallBackRecvCB;
 
-	if (1)
+	if (0)
 	{
 		char sdkid[64] = "62395051197526";
 		char peersdkid[64] = "62395051197525";
@@ -36,33 +40,43 @@ int main()
 		FlyCanAddCallBack(pCallBack);
 		FlyCanRegister();
 		Sleep(2000);
-		dwHandle = FlyCanCreateSession(0);
+		dwHandleServer = FlyCanCreateSession(0);
 		Sleep(2000);
-		FlyCanListenSession(dwHandle, 5);
-		Sleep(20000);
-		FlyCanReleaseSession(dwHandle);
+		FlyCanListenSession(dwHandleServer, 5);
+		Sleep(40000);
+		if (!bClient)
+		{
+			for (int i = 0; i < (int)vtList.size(); i++)
+			{
+				FlyCanReleaseSession(vtList[i]);
+			}
+			vtList.clear();
+		}
 		Sleep(2000);
 		FlyCanUnRegister();
+		FlyCanRemoveCallBack(pCallBack);
 		FlyCanUnInit();
 	}
 	else
 	{
-		char peersdkid[64] = "62395051197526";
-		char sdkid[64] = "62395051197525";
+		char sdkid[64] = "62395051197526";
+		char peersdkid[64] = "62395051197525";
 
 		FlyCanInit(sid, token, appid, sdkid);
 		FlyCanAddCallBack(pCallBack);
 		FlyCanRegister();
 		Sleep(2000);
-		dwHandle = FlyCanCreateSession(0);
+		dwHandleClient = FlyCanCreateSession(0);
 		Sleep(2000);
-		FlyCanListenSession(dwHandle, 5);
-		Sleep(2000);
-		FlyCanConnectSession(dwHandle, peersdkid);
-		Sleep(5000);
-		FlyCanReleaseSession(dwHandle);
+		FlyCanConnectSession(dwHandleClient, peersdkid);
+		Sleep(40000);
+		if (bClient)
+		{
+			FlyCanReleaseSession(dwHandleClient);
+		}
 		Sleep(2000);
 		FlyCanUnRegister();
+		FlyCanRemoveCallBack(pCallBack);
 		FlyCanUnInit();
 	}
     return 0;
@@ -77,16 +91,21 @@ void CallBackEventCB(int nEvent, int nCode, void *pData)
 	if (nEvent == EVT_SESSION_INCOMING)
 	{
 		nMaxChannal = nCode;
+		bClient = false;
+		// 接收会话
 		FlyCanAcceptSession(pData);
+		vtList.push_back(pData);
+		// 拒绝会话
 		//FlyCanRejectSession(pData);
 	}
 	if (nEvent == EVT_SESSION_ACCEPT)
 	{
 		nMaxChannal = nCode;
+		bClient = true;
 		char szData[32] = "Only you can love me!";
 		for (int i = 0; i < nMaxChannal; i++)
 		{
-			FlyCanSend(dwHandle, szData, strlen(szData), i);
+			FlyCanSend(dwHandleClient, szData, strlen(szData), i);
 
 			str.Format("FlyCanSend = %s, nChannal = %d\r\n", szData, i);
 			OutputDebugStringA(str);
