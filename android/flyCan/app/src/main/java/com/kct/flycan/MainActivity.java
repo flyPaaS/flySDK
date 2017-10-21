@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.kct.flycan.sdk.listener.OnflyListener;
 import com.kct.flycan.sdk.ssl.ByteUtil;
 
+import java.util.ArrayList;
+
 import static com.kct.flycan.sdk.flyBase.EVT_LOGINOUT_SUCCUSS;
 import static com.kct.flycan.sdk.flyBase.EVT_REGISTER_FAILURE;
 import static com.kct.flycan.sdk.flyBase.EVT_REGISTER_SUCCUSS;
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
     // 变量
     public int nSessionId = 0;
     public int nMaxChannal = 0;
+    // 主被叫
+    public boolean bClient = false;
+    // 连接的会话ID
+    public ArrayList<Integer> mSessionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                     @Override
                     public void run() {
                         nSessionId = com.kct.flycan.sdk.flySDK.flycan_CreateSession(0);
-                        Log.e(TAG, "flycan_CreateSession id = " + nSessionId);
+                        Log.e(TAG, "flycan_CreateSession Server id = " + nSessionId);
+
                         // 延时2秒监听
                         if (nSessionId != 0) {
                             try {
@@ -116,7 +123,13 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                     public void run() {
                         if (nMaxChannal > 0) {
                             String szData = "Only you can love me!";
-                            com.kct.flycan.sdk.flySDK.flycan_Send(nSessionId, szData.getBytes(), szData.length(), 0);
+                            if (bClient) {
+                                com.kct.flycan.sdk.flySDK.flycan_Send(nSessionId, szData.getBytes(), szData.length(), 0);
+                            } else {
+                                for (int i = 0; i < mSessionList.size(); i++) {
+                                    com.kct.flycan.sdk.flySDK.flycan_Send(mSessionList.get(i), szData.getBytes(), szData.length(), 0);
+                                }
+                            }
                         }
                     }
                 }).start();
@@ -128,8 +141,16 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (nSessionId != 0) {
+                        if (bClient) {
                             com.kct.flycan.sdk.flySDK.flycan_ReleaseSession(nSessionId);
+                        } else {
+                            for (int i = 0;i < mSessionList.size();i++) {
+                                int nSession = mSessionList.get(i);
+                                if (nSession != 0) {
+                                    com.kct.flycan.sdk.flySDK.flycan_ReleaseSession(nSession);
+                                }
+                            }
+                            mSessionList.clear();
                         }
                     }
                 }).start();
@@ -143,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                     public void run() {
                         com.kct.flycan.sdk.flySDK.flycan_UnRegister();
                         com.kct.flycan.sdk.flySDK.flycan_UnInit();
+                        com.kct.flycan.sdk.flySDK.flycan_RemoveCallBack(MainActivity.this);
                     }
                 }).start();
 
@@ -157,11 +179,17 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         // 分析事件
         if (nEvent == EVT_SESSION_INCOMING) {
             nMaxChannal = nCode;
-            com.kct.flycan.sdk.flySDK.flycan_AcceptSession(ByteUtil.Byte2Int(pData));
-            //com.kct.flycan.sdk.flySDK.flycan_RejectSession(ByteUtil.Byte2Int(pData));
+            int nSession = ByteUtil.Byte2Int(pData);
+            bClient = false;
+            // 接收会话
+            com.kct.flycan.sdk.flySDK.flycan_AcceptSession(nSession);
+            mSessionList.add(nSession);
+            // 拒绝会话
+            //com.kct.flycan.sdk.flySDK.flycan_RejectSession(nSession);
         }
         if (nEvent == EVT_SESSION_ACCEPT) {
             nMaxChannal = nCode;
+            bClient = true;
         }
         if (nEvent == EVT_SESSION_REJECT) {
 
