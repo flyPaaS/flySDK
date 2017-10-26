@@ -31,7 +31,7 @@ typedef enum {
 
 @protocol flycanDelegate <NSObject>
 
-- (void)flycanEvent:(FlycanEventType)eventType;
+- (void)flycanEvent:(int)sessionId eventType:(FlycanEventType)eventType param:(void *)param;
 - (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe;
 
 @end
@@ -76,6 +76,7 @@ typedef enum {
  */
 - (void)flycanConnectSession:(int)sessionId peerId:(NSString *)peerId;
 
+- (void)flycanConnectServer:(int)sessionId ip:(NSString *)ip port:(unsigned short)port;
 /*
  
  */
