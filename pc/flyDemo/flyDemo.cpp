@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "../flySDK/flySDK.h"
-#pragma comment(lib, "../flySDK/output/flySDK.lib")
+#include "./flySDK.h"
+#pragma comment(lib, "./flySDK.lib")
 
 int nMaxChannal = 0;
 bool bClient = false;
