@@ -827,6 +827,7 @@
                                         <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="RkL-66-Rbu">
                                             <rect key="frame" x="0.0" y="0.0" width="303" height="213"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="textColor" red="1" green="0.17014681800000001" blue="0.22365357890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <size key="minSize" width="303" height="213"/>
                                             <size key="maxSize" width="463" height="10000000"/>
@@ -871,6 +872,7 @@
                     <connections>
                         <outlet property="call" destination="Vs7-eG-urQ" id="rgi-35-nsl"/>
                         <outlet property="called" destination="chO-z6-rxg" id="WMS-Zv-dxq"/>
+                        <outlet property="statueLabel" destination="RkL-66-Rbu" id="4jQ-qs-4F2"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

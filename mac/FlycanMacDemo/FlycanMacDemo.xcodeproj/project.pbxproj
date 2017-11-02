@@ -7,16 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A9A6DF71FA17B4E00F64045 /* libflycan_Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A9A6DF61FA17B4E00F64045 /* libflycan_Mac.a */; };
+		5AA13CB11F9DCE9F00F74674 /* libflycan_Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AFAB9EF1F906C62005B423D /* libflycan_Mac.a */; };
 		5AFAB9D51F90528F005B423D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAB9D41F90528F005B423D /* AppDelegate.m */; };
 		5AFAB9D81F90528F005B423D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAB9D71F90528F005B423D /* main.m */; };
 		5AFAB9DB1F905290005B423D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAB9DA1F905290005B423D /* ViewController.m */; };
 		5AFAB9DD1F905290005B423D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AFAB9DC1F905290005B423D /* Assets.xcassets */; };
 		5AFAB9E01F905290005B423D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AFAB9DE1F905290005B423D /* Main.storyboard */; };
-		5AFAB9F01F906C62005B423D /* libflycan_Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AFAB9EF1F906C62005B423D /* libflycan_Mac.a */; };
 		5AFAB9F21F906C87005B423D /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AFAB9F11F906C87005B423D /* libstdc++.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A9A6DF61FA17B4E00F64045 /* libflycan_Mac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libflycan_Mac.a; sourceTree = "<group>"; };
+		5AA13CAA1F9DCDBC00F74674 /* libflycan copy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libflycan copy.a"; path = "../flycan/build/Debug/libflycan copy.a"; sourceTree = "<group>"; };
+		5AA13CAC1F9DCDF100F74674 /* libflycan copy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libflycan copy.a"; path = "../flycan/build/Debug/libflycan copy.a"; sourceTree = "<group>"; };
+		5AA13CAF1F9DCE8D00F74674 /* libflycan copy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libflycan copy.a"; path = "../../../../../Library/Developer/Xcode/DerivedData/Flycan-bfxyrkpqjjlllxdzfdyefolphftw/Build/Products/Debug/libflycan copy.a"; sourceTree = "<group>"; };
 		5AFAB9D01F90528F005B423D /* FlycanMacDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlycanMacDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AFAB9D31F90528F005B423D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5AFAB9D41F90528F005B423D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -38,8 +43,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AA13CB11F9DCE9F00F74674 /* libflycan_Mac.a in Frameworks */,
+				5A9A6DF71FA17B4E00F64045 /* libflycan_Mac.a in Frameworks */,
 				5AFAB9F21F906C87005B423D /* libstdc++.tbd in Frameworks */,
-				5AFAB9F01F906C62005B423D /* libflycan_Mac.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +114,7 @@
 		5AFAB9EA1F9065C3005B423D /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				5A9A6DF61FA17B4E00F64045 /* libflycan_Mac.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -124,6 +131,9 @@
 		5AFAB9EE1F906C61005B423D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5AA13CAF1F9DCE8D00F74674 /* libflycan copy.a */,
+				5AA13CAC1F9DCDF100F74674 /* libflycan copy.a */,
+				5AA13CAA1F9DCDBC00F74674 /* libflycan copy.a */,
 				5AFAB9F11F906C87005B423D /* libstdc++.tbd */,
 				5AFAB9EF1F906C62005B423D /* libflycan_Mac.a */,
 			);
@@ -320,6 +330,12 @@
 				GCC_PREFIX_HEADER = FlycanMacDemo/Config/PrefixHeader.pch;
 				INFOPLIST_FILE = FlycanMacDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDK/lib",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = KCT.FlycanMacDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -335,6 +351,12 @@
 				GCC_PREFIX_HEADER = FlycanMacDemo/Config/PrefixHeader.pch;
 				INFOPLIST_FILE = FlycanMacDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDK/lib",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = KCT.FlycanMacDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

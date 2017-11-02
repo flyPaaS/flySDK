@@ -28,6 +28,7 @@
 
 @implementation ViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -45,12 +46,12 @@
 #endif
     
 #ifdef kTestEnvironment
-    self.call.stringValue = @"62395051197521";
-    self.called.stringValue = @"62395051197520";
+    self.call.stringValue = @"62395051197520";
+    self.called.stringValue = @"62395051197521";
     
 #else
-    self.call.stringValue = @"62508051197251";
-    self.called.stringValue = @"62508051197250";
+    self.call.stringValue = @"62508051197250";
+    self.called.stringValue = @"62508051197251";
 #endif
     
     flyEngin = [[flycan alloc] init];
@@ -62,6 +63,7 @@
     [flyEngin flycanInit:accountSid token:token appid:appid sdkid:sdkid];
     // Do any additional setup after loading the view.
 }
+
 
 - (void)flycanEvent:(int)sessionId eventType:(FlycanEventType)eventType param:(void *)param
 {

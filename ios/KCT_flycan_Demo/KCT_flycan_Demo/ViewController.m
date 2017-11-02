@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "HttpRequestEngine.h"
+#include <pthread.h>
+
 
 #define kCallSdkId  @"callsdkid"
 #define kCalledSdkId @"calledsdkid"
@@ -15,8 +17,8 @@
 @interface ViewController ()
 {
     flycan *flyEngin;
-    int sessionId;
-    int newSessionId;
+    int _sessionId;
+    int _newSessionId;
     NSUserDefaults *userdefault;
     BOOL isServier;
     int count;
@@ -64,8 +66,8 @@
     }
     
 #ifdef kTestEnvironment
-    self.call.text = callid;
-    self.called.text = calledid;
+    self.call.text = @"62395051197520";
+    self.called.text = @"62395051197521";
     
 #else
     self.call.text = @"62508051197251";
@@ -86,19 +88,21 @@
 }
 
 
-- (void)flycanEvent:(FlycanEventType)eventType
+- (void)flycanEvent:(int)sessionId eventType:(FlycanEventType)eventType param:(void *)param
 {
     NSString *showText;
     
     if (eventType == EVT_REGISTER_SUCCUSS) {
-        sessionId = [flyEngin flycanCreateSession:TransportProtocolUDP];
+        _sessionId = [flyEngin flycanCreateSession:TransportProtocolUDP];
         [flyEngin flycanSessionListen:sessionId sessionNum:2];
-        showText = [NSString stringWithFormat:@"注册成功 create sessionId: %d\n",sessionId];
+        showText = [NSString stringWithFormat:@"注册成功 create sessionId: %d\n",_sessionId];
     }
     if (eventType == EVT_SESSION_INCOMING) {
         isServier = YES;
-        newSessionId = [flyEngin flycanAcceptSession:sessionId];
-        showText = [NSString stringWithFormat:@"收到 sessionId: %d 的请求连接\n",newSessionId];
+        _newSessionId = [flyEngin flycanAcceptSession:_sessionId];
+        showText = [NSString stringWithFormat:@"收到 sessionId: %d 的请求连接\n",_newSessionId];
+        int *ptr = param;
+        NSLog(@"channel number is %d",*ptr);
         //[flyEngin flycan_reject_session:session];
     }
     if (eventType == EVT_SESSION_BIND_SUCCUSS) {
@@ -116,10 +120,11 @@
 }
 
 
-- (void)flycanRecv:(int)sessionId2 buf:(void *)buf len:(int)len channel:(int)channel_indxe
+- (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *showText = [NSString stringWithFormat:@"data recv :%s size :%d sessionId :%d channel: %d\n",buf,len,sessionId2,channel_indxe];
+        NSString *showText = [NSString stringWithFormat:@"data recv :%s size :%d sessionId :%d channel: %d\n",buf,len,sessionId,channelIndxe];
+        printf("recv %s\n",buf);
         [self updateState:showText];
     });
 }
@@ -131,6 +136,7 @@
 }
 
 - (IBAction)login:(id)sender {
+
     [flyEngin flycanRegister];
     NSString *showText = [NSString stringWithFormat:@"beed login...\n"];
     [self updateState:showText];
@@ -138,14 +144,21 @@
 
 
 - (IBAction)connect:(id)sender {
-    [flyEngin flycanConnectSession:sessionId peerId:self.called.text];
-    NSString *showText = [NSString stringWithFormat:@"beed connecting sessionId: %d\n",sessionId];
+    [flyEngin flycanConnectSession:_sessionId peerId:self.called.text];
+#ifdef kTestEnvironment
+    
+    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.231" port:8800];
+#else
+    [flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:5000];
+    
+#endif
+    NSString *showText = [NSString stringWithFormat:@"beed connecting sessionId: %d\n",_sessionId];
     [self updateState:showText];
 }
 
 - (IBAction)disconnect:(id)sender {
-    [flyEngin flycanReleaseSession:sessionId];
-    NSString *showText = [NSString stringWithFormat:@"disconnect sessionId: %d\n",sessionId];
+    [flyEngin flycanReleaseSession:_sessionId];
+    NSString *showText = [NSString stringWithFormat:@"disconnect sessionId: %d\n",_sessionId];
     [self updateState:showText];
 }
 
@@ -157,13 +170,36 @@
 - (IBAction)sendData:(id)sender {
     NSString *str = @"flycan Sdk";
     NSData *data =  [str dataUsingEncoding:NSUTF8StringEncoding];
-    int sendSessionId = sessionId;
+    int sendSessionId = _sessionId;
     if (isServier) {
-        sendSessionId = newSessionId;
+        sendSessionId = _newSessionId;
     }
-    [flyEngin flycanSend:sendSessionId data:data len:data.length channelIndex:-1];
+
+    [flyEngin flycanSend:sendSessionId data:data len:data.length channelIndex:0];
     NSString *showText = [NSString stringWithFormat:@"send buffer: %@ sessionId: %d\n",str,sendSessionId];
     [self updateState:showText];
+    
+    pthread_t g_cmdRecvDataThreadId;
+    pthread_create(&g_cmdRecvDataThreadId, NULL, CmdRecvDataThread, (__bridge void *)self);
+    
+}
+
+void *CmdRecvDataThread(void *param)
+{
+    ViewController *selfPtr = (__bridge ViewController *)param;
+    int sendSessionId = selfPtr->_sessionId;
+    if (selfPtr->isServier) {
+        sendSessionId = selfPtr->_newSessionId;
+    }
+    
+    for (int i = 0; i<1000000; i++) {
+        sleep(1);
+        
+        NSString *str1 = [NSString stringWithFormat:@"send %d times",i];
+        NSData *data1 =  [str1 dataUsingEncoding:NSUTF8StringEncoding];
+        [selfPtr->flyEngin flycanSend:sendSessionId data:data1 len:data1.length channelIndex:0];
+    }
+    return NULL;
 }
 
 - (void)updateState:(NSString *)context {
