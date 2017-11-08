@@ -5,9 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "../flySDK/flySDK.h"
-#pragma comment(lib, "../flySDK/output/flySDK.lib")
+#include "flySDK.h"
+#pragma comment(lib, "./flySDK.lib")
 
+bool bConnect = false;
 int nMaxChannal = 0;
 bool bClient = false;
 HANDLE dwHandleServer = NULL;
@@ -69,8 +70,25 @@ int main()
 		Sleep(2000);
 		dwHandleClient = FlyCanCreateSession(PROTOCOL_UDP);
 		Sleep(2000);
+		bConnect = false;
 		FlyCanConnectSession(dwHandleClient, peersdkid);
-		Sleep(20000);
+		Sleep(2000);
+		// 发送数据
+		if (bConnect)
+		{
+			char szData[32] = "Only you can love me!";
+			for (int i = 0; i < nMaxChannal; i++)
+			{
+				for (size_t j = 0; j < 20; j++)
+				{
+					FlyCanSend(dwHandleClient, szData, strlen(szData), i);
+
+					Report("FlyCanSend = %s, nChannal = %d, MaxChannal = %d\r\n", szData, i, nMaxChannal);
+					Sleep(400);
+				}
+			}
+		}
+
 		if (bClient)
 		{
 			FlyCanReleaseSession(dwHandleClient);
@@ -88,8 +106,25 @@ int main()
 		Sleep(2000);
 		dwHandleClient = FlyCanCreateSession(PROTOCOL_UDP);
 		Sleep(2000);
+		bConnect = false;
 		FlyCanConnectServer(dwHandleClient, "114.112.83.110", 29099);
-		Sleep(20000);
+		Sleep(2000);
+		// 发送数据
+		if (bConnect)
+		{
+			char szData[32] = "Only you can love me!";
+			for (int i = 0; i < nMaxChannal; i++)
+			{
+				for (size_t j = 0; j < 20; j++)
+				{
+					FlyCanSend(dwHandleClient, szData, strlen(szData), i);
+
+					Report("FlyCanSend = %s, nChannal = %d, MaxChannal = %d\r\n", szData, i, nMaxChannal);
+					Sleep(400);
+				}
+			}
+		}
+
 		if (bClient)
 		{
 			FlyCanReleaseSession(dwHandleClient);
@@ -107,8 +142,25 @@ int main()
 		Sleep(2000);
 		dwHandleClient = FlyCanCreateSession(PROTOCOL_TCP);
 		Sleep(2000);
+		bConnect = false;
 		FlyCanConnectServer(dwHandleClient, "114.112.83.110", 9099);
-		Sleep(20000);
+		Sleep(2000);
+		// 发送数据
+		if (bConnect)
+		{
+			char szData[32] = "Only you can love me!";
+			for (int i = 0; i < nMaxChannal; i++)
+			{
+				for (size_t j = 0; j < 20; j++)
+				{
+					FlyCanSend(dwHandleClient, szData, strlen(szData), i);
+
+					Report("FlyCanSend = %s, nChannal = %d, MaxChannal = %d\r\n", szData, i, nMaxChannal);
+					Sleep(400);
+				}
+			}
+		}
+		
 		if (bClient)
 		{
 			FlyCanReleaseSession(dwHandleClient);
@@ -118,14 +170,14 @@ int main()
 		FlyCanRemoveCallBack(pCallBack);
 		FlyCanUnInit();
 	}
+
+	delete pCallBack;
     return 0;
 }
 
 void CallBackEventCB(int nEvent, int nCode, void *pData)
 {
-	CStringA str;
-	str.Format("nEvent = %d, nCode = %d\r\n", nEvent, nCode);
-	OutputDebugStringA(str);
+	Report("nEvent = %d, nCode = %d\r\n", nEvent, nCode);
 
 	if (nEvent == EVT_SESSION_INCOMING)
 	{
@@ -141,21 +193,7 @@ void CallBackEventCB(int nEvent, int nCode, void *pData)
 	{
 		nMaxChannal = nCode;
 		bClient = true;
-		// 更新代码
-		char szData[32] = "Only you can love me!";
-		for (int i = 0; i < nMaxChannal; i++)
-		{
-			for (size_t j = 0; j < 20; j++)
-			{
-				FlyCanSend(dwHandleClient, szData, strlen(szData), i);
-
-				CStringA str;
-				str.Format("FlyCanSend = %s, nChannal = %d, MaxChannal = %d\r\n", szData, i, nMaxChannal);
-				OutputDebugStringA(str);
-
-				Sleep(10);
-			}
-		}
+		bConnect = true;
 	}
 	if (nEvent == EVT_SESSION_REJECT)
 	{
@@ -165,8 +203,6 @@ void CallBackEventCB(int nEvent, int nCode, void *pData)
 
 void CallBackRecvCB(void* pHandle, void *pData, int nLen, int nChannalId)
 {
-	CStringA str;
-	str.Format("EVT_PACKET_RCVD data = %s,nChannalId = %d\r\n", (char*)pData, nChannalId);
-	OutputDebugStringA(str);
+	Report("EVT_PACKET_RCVD data = %s,nChannalId = %d\r\n", (char*)pData, nChannalId);
 }
 

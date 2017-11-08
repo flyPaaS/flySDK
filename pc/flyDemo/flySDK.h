@@ -9,6 +9,8 @@
 // 协议类型
 #define PROTOCOL_UDP	0
 #define PROTOCOL_TCP	1
+//#define PROTOCOL_RTP	2
+//#define PROTOCOL_QUIC	3
 
 // 回调的事件
 #define EVT_REGISTER_SUCCUSS		1000		// SDK注册成功
