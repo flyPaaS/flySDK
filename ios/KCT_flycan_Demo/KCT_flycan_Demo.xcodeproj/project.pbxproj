@@ -20,7 +20,7 @@
 		5A4EB02B1F4ECDBE00083295 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0291F4ECDBE00083295 /* LaunchScreen.storyboard */; };
 		5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4EB0361F4EEDBE00083295 /* libflycan.a */; };
 		5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4FFB851F56B11400F841BC /* libstdc++.tbd */; };
-		5A9A6DF91FA17B9C00F64045 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A9A6DF81FA17B9C00F64045 /* libflycan.a */; };
+		5A6A9DC11FA873B600139294 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6A9DC01FA873B600139294 /* libflycan.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +49,7 @@
 		5A4EB0391F4EEE2C00083295 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		5A4EB03A1F4EEE9E00083295 /* AppHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppHeaders.h; sourceTree = "<group>"; };
 		5A4FFB851F56B11400F841BC /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
-		5A9A6DF81FA17B9C00F64045 /* libflycan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libflycan.a; sourceTree = "<group>"; };
+		5A6A9DC01FA873B600139294 /* libflycan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libflycan.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +59,7 @@
 			files = (
 				5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */,
 				5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */,
-				5A9A6DF91FA17B9C00F64045 /* libflycan.a in Frameworks */,
+				5A6A9DC11FA873B600139294 /* libflycan.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,7 +189,7 @@
 		5A9BC3931F6FA5A800C2453A /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				5A9A6DF81FA17B9C00F64045 /* libflycan.a */,
+				5A6A9DC01FA873B600139294 /* libflycan.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";

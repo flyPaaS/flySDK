@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jpE-Cw-IAr">
-                                <rect key="frame" x="129" y="192" width="116" height="30"/>
+                                <rect key="frame" x="129" y="210" width="116" height="30"/>
                                 <state key="normal" title="Connect Session"/>
                                 <connections>
                                     <action selector="connect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bd3-PH-6OG"/>
@@ -66,28 +66,28 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSZ-Sd-4nD">
-                                <rect key="frame" x="153.5" y="242" width="68" height="30"/>
+                                <rect key="frame" x="153.5" y="280" width="68" height="30"/>
                                 <state key="normal" title="send data"/>
                                 <connections>
                                     <action selector="sendData:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iLm-AB-xFe"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XLu-25-mpi">
-                                <rect key="frame" x="0.0" y="392" width="375" height="275"/>
+                                <rect key="frame" x="0.0" y="430" width="375" height="237"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="0.1565685393" blue="0.43418172500000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hHk-Ad-57V">
-                                <rect key="frame" x="150.5" y="342" width="74" height="30"/>
+                                <rect key="frame" x="150.5" y="380" width="74" height="30"/>
                                 <state key="normal" title="unRegister"/>
                                 <connections>
                                     <action selector="eixt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hot-o8-bXL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TaF-cF-8lA">
-                                <rect key="frame" x="148" y="292" width="79" height="30"/>
+                                <rect key="frame" x="148" y="330" width="79" height="30"/>
                                 <state key="normal" title="disConnect"/>
                                 <connections>
                                     <action selector="disconnect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rU1-Qx-3jQ"/>
@@ -109,9 +109,9 @@
                             <constraint firstItem="TaF-cF-8lA" firstAttribute="top" secondItem="hSZ-Sd-4nD" secondAttribute="bottom" constant="20" id="UKj-dB-Dvx"/>
                             <constraint firstItem="HHH-bO-mMj" firstAttribute="centerY" secondItem="JBo-jy-r5R" secondAttribute="centerY" id="VGr-eX-eFR"/>
                             <constraint firstItem="nbN-TN-Dnd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XON-YO-EaZ"/>
-                            <constraint firstItem="hSZ-Sd-4nD" firstAttribute="top" secondItem="jpE-Cw-IAr" secondAttribute="bottom" constant="20" id="ZvM-kC-KTV"/>
+                            <constraint firstItem="hSZ-Sd-4nD" firstAttribute="top" secondItem="jpE-Cw-IAr" secondAttribute="bottom" constant="40" id="ZvM-kC-KTV"/>
                             <constraint firstItem="XLu-25-mpi" firstAttribute="top" secondItem="hHk-Ad-57V" secondAttribute="bottom" constant="20" id="cOM-kj-Hqw"/>
-                            <constraint firstItem="jpE-Cw-IAr" firstAttribute="top" secondItem="gQX-RG-zRB" secondAttribute="bottom" constant="22" id="eGO-Gn-0K2"/>
+                            <constraint firstItem="jpE-Cw-IAr" firstAttribute="top" secondItem="gQX-RG-zRB" secondAttribute="bottom" constant="40" id="eGO-Gn-0K2"/>
                             <constraint firstItem="JBo-jy-r5R" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="f91-Yn-mq0"/>
                             <constraint firstItem="gQX-RG-zRB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sqc-mI-iHA"/>
                             <constraint firstItem="gQX-RG-zRB" firstAttribute="top" secondItem="nbN-TN-Dnd" secondAttribute="bottom" constant="20" id="wMg-C7-Euw"/>

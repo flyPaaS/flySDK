@@ -93,7 +93,7 @@
     NSString *showText;
     
     if (eventType == EVT_REGISTER_SUCCUSS) {
-        _sessionId = [flyEngin flycanCreateSession:TransportProtocolUDP];
+        _sessionId = [flyEngin flycanCreateSession:TransportProtocolTCP];
         [flyEngin flycanSessionListen:sessionId sessionNum:2];
         showText = [NSString stringWithFormat:@"注册成功 create sessionId: %d\n",_sessionId];
     }
@@ -122,11 +122,12 @@
 
 - (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *showText = [NSString stringWithFormat:@"data recv :%s size :%d sessionId :%d channel: %d\n",buf,len,sessionId,channelIndxe];
-        printf("recv %s\n",buf);
-        [self updateState:showText];
-    });
+    NSLog(@"recv data len:%d channelIndex:%d",len,channelIndxe);
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSString *showText = [NSString stringWithFormat:@"data recv :%s size :%d sessionId :%d channel: %d\n",buf,len,sessionId,channelIndxe];
+//        printf("recv %s\n",buf);
+//        [self updateState:showText];
+//    });
 }
 
 
@@ -144,14 +145,18 @@
 
 
 - (IBAction)connect:(id)sender {
-    [flyEngin flycanConnectSession:_sessionId peerId:self.called.text];
+    
+    //[flyEngin flycanConnectSession:_sessionId peerId:self.called.text];
 #ifdef kTestEnvironment
     
-    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.231" port:8800];
+    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.145" port:8800];
 #else
-    [flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:5000];
+    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:9099];
     
 #endif
+    
+    [flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:29099];
+    
     NSString *showText = [NSString stringWithFormat:@"beed connecting sessionId: %d\n",_sessionId];
     [self updateState:showText];
 }
@@ -192,19 +197,21 @@ void *CmdRecvDataThread(void *param)
         sendSessionId = selfPtr->_newSessionId;
     }
     
-    for (int i = 0; i<1000000; i++) {
-        sleep(1);
-        
-        NSString *str1 = [NSString stringWithFormat:@"send %d times",i];
-        NSData *data1 =  [str1 dataUsingEncoding:NSUTF8StringEncoding];
-        [selfPtr->flyEngin flycanSend:sendSessionId data:data1 len:data1.length channelIndex:0];
+    while (1) {
+        @autoreleasepool {
+            char buffer[1023] = {};
+            NSData *data1 =  [NSData dataWithBytes:buffer length:1023];
+            [selfPtr->flyEngin flycanSend:sendSessionId data:data1 len:data1.length channelIndex:0];
+            usleep(20*1000);
+        }
     }
+    
     return NULL;
 }
 
 - (void)updateState:(NSString *)context {
-    [showString appendString:context];
-    self.statueLabel.text = showString;
+    //[showString appendString:context];
+    //self.statueLabel.text = showString;
 }
 
 
