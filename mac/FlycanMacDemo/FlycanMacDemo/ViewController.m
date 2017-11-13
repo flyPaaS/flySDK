@@ -70,8 +70,8 @@
     NSString *showText;
     
     if (eventType == EVT_REGISTER_SUCCUSS) {
-        _sessionId = [flyEngin flycanCreateSession:TransportProtocolTCP];
-        [flyEngin flycanSessionListen:sessionId sessionNum:2];
+        _sessionId = [flyEngin flycanCreateSession:TransportProtocolUDP];
+        [flyEngin flycanSessionListen:_sessionId sessionNum:2];
         showText = [NSString stringWithFormat:@"注册成功 create sessionId: %d\n",_sessionId];
     }
     if (eventType == EVT_SESSION_INCOMING) {
@@ -90,6 +90,7 @@
     }
     if (eventType == EVT_UNREGISTER) {
         showText = [NSString stringWithFormat:@"unRegister !!!\n"];
+        [flyEngin flycanUnInit];
     }
     if (showText != NULL) {
         [self updateState:showText];
@@ -98,8 +99,11 @@
 
 - (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe
 {
-    NSLog(@"recv data len:%d channelIndex:%d",len,channelIndxe);
-    NSData *data1 =  [NSData dataWithBytes:buf length:len];
+    static int times = 0;
+    times++;
+    NSLog(@"------recv times :%d---- ",times);
+    NSLog(@"sessionid %d recv data len:%d channelIndex:%d",sessionId,len,channelIndxe);
+    //NSData *data1 =  [NSData dataWithBytes:buf length:len];
     
     //[flyEngin flycanSend:sessionId data:data1 len:data1.length channelIndex:channelIndxe];
     
