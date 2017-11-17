@@ -19,6 +19,14 @@
     // Override point for customization after application launch.
     application.idleTimerDisabled = YES;
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *bufMax = [defaults objectForKey:@"maxBuffer"];
+    if (!bufMax)
+    {
+        NSNumber *defaultNum = [NSNumber numberWithInt:1024];
+        [defaults setObject:defaultNum forKey:@"maxBuffer"];
+        [defaults synchronize];
+    }
     return YES;
 }
 
