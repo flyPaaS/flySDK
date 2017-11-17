@@ -13,6 +13,7 @@
     flycan *flyEngin;
     int _sessionId;
     int _newSessionId;
+    BOOL isSend;
     NSUserDefaults *userdefault;
     BOOL isServier;
     int count;
@@ -123,13 +124,16 @@ void *CmdRecvDataThread(void *param)
     if (selfPtr->isServier) {
         sendSessionId = selfPtr->_newSessionId;
     }
-    
-    while (1) {
+    int times = 0;
+    const int maxSize = 2048;
+    while (selfPtr->isSend) {
         @autoreleasepool {
-            char buffer[1023] = {};
-            NSData *data1 =  [NSData dataWithBytes:buffer length:1023];
+            char buffer[maxSize] = {"123456"};
+            NSData *data1 =  [NSData dataWithBytes:buffer length:maxSize];
             [selfPtr->flyEngin flycanSend:sendSessionId data:data1 len:data1.length channelIndex:0];
-            usleep(1000*1000);
+            usleep(50*1000);
+            times++;
+            NSLog(@"------send times :%d---- ",times);
         }
         
     }
@@ -139,8 +143,8 @@ void *CmdRecvDataThread(void *param)
 }
 
 - (void)updateState:(NSString *)context {
-    //[showString appendString:context];
-    //self.statueLabel.string = showString;
+    [showString appendString:context];
+    self.statueLabel.string = showString;
 }
 
 
@@ -164,14 +168,16 @@ void *CmdRecvDataThread(void *param)
 
 
 - (IBAction)connect:(id)sender {
-    [flyEngin flycanConnectSession:_sessionId peerId:self.called.stringValue];
+    //[flyEngin flycanConnectSession:_sessionId peerId:self.called.stringValue];
     //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.145" port:8800];
-    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:29099];
+    [flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:29099];
+    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.196" port:29099];
     NSString *showText = [NSString stringWithFormat:@"beed connecting sessionId: %d\n",_sessionId];
     [self updateState:showText];
 }
 
 - (IBAction)disconnect:(id)sender {
+    isSend = NO;
     [flyEngin flycanReleaseSession:_sessionId];
     NSString *showText = [NSString stringWithFormat:@"disconnect sessionId: %d\n",_sessionId];
     [self updateState:showText];
@@ -183,6 +189,7 @@ void *CmdRecvDataThread(void *param)
 }
 
 - (IBAction)sendData:(id)sender {
+    isSend = YES;
     NSString *str = @"flycan Sdk";
     NSData *data =  [str dataUsingEncoding:NSUTF8StringEncoding];
     int sendSessionId = _sessionId;

@@ -33,6 +33,7 @@ typedef enum {
 
 - (void)flycanEvent:(int)sessionId eventType:(FlycanEventType)eventType param:(void *)param;
 - (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe;
+- (void)flyTran:(int)sessionId direct:(int)direct;
 
 @end
 
