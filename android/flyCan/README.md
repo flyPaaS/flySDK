@@ -133,7 +133,7 @@ gradle assembleDebug
 
     /**
      * 监听会话(作为服务器端调用)
-     * @param handle
+     * @param handle 会话句柄
      */
     public synchronized void flycan_ListenSession(int handle);
 
@@ -150,8 +150,7 @@ gradle assembleDebug
 
     /**
      * 接收来自对方的连接请求，作为服务器端接收到连接请求时调用
-     * @param handle
-     * @param objs
+     * @param handle 会话句柄
      * @return
      */
 
@@ -159,7 +158,7 @@ gradle assembleDebug
 
     /**
      * 拒绝对方的连接请求
-     * @param handle
+     * @param handle 会话句柄
      * @return
      */
     public synchronized boolean flycan_RejectSession(int handle);
