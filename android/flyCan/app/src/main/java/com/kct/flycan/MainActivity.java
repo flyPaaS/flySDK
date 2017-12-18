@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.kct.flycan.sdk.flySDK;
+import com.kct.flycan.sdk.ice.IceListener;
 import com.kct.flycan.sdk.listener.OnflyListener;
 import com.kct.flycan.sdk.ssl.ByteUtil;
+import com.kct.flycan.sdk.utils.NetUtils;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ import static com.kct.flycan.sdk.flyBase.EVT_SESSION_REJECT;
 import static com.kct.flycan.sdk.flyBase.EVT_SESSION_RELEASE_FAILURE;
 import static com.kct.flycan.sdk.flyBase.EVT_SESSION_RELEASE_SUCCUSS;
 
-public class MainActivity extends AppCompatActivity implements OnflyListener{
+public class MainActivity extends AppCompatActivity implements OnflyListener, IceListener{
     // TAG
     private static final String TAG = "KC";
     // 控件
@@ -42,7 +44,11 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
     public Button mBtnSend = null;
     public Button mBtnUnCon = null;
     public Button mBtnUnReg = null;
+    public Button mBtnSendBig = null;
+
     public TextView mTextInfo = null;
+
+
     // 常量, production
     public String sid = "b64e977c108810429b9056208059d362";
     public String token = "cd1e4ce88775dcaf8bbf9236e9811c4a";
@@ -88,12 +94,63 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
     public static int STATUS_SERVER = 4;
 
 
+    /**
+     * Is any command running
+     */
+    public static boolean workingStatus=false;
+
+    /**
+     * Is sending big data running
+     */
+    public static boolean runningBigData = false;
+
+    /**
+     * Max count of sending big data
+     */
+    public static int BIG_DATA_COUNT = 1000;
+
+
+    /**
+     * Receiving data
+     */
+    public static int MSG_RECEIVING_DATA = 10000;
+
+    /**
+     * Message that start sending big data
+     */
+    public static int MSG_START_SENDING_BIG_DATA = 10001;
+    /**
+     * Message that stop sending big data
+     */
+    public static int MSG_STOP_SENDING_BIG_DATA = 10002;
+    /**
+     * Message that send big data
+     */
+    public static int MSG_SEND_BIG_DATA = 10003;
+
     // 连接的会话ID
     public ArrayList<Integer> mSessionList = new ArrayList<>();
     /**
      * Counter for message
      */
     public static int counter = 0;
+
+    //获取指定位数的随机字符串(包含小写字母、大写字母、数字,0<length)
+    public static String getRandomString(int length) {
+        //随机字符串的随机字符库
+        String KeyString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuffer sb = new StringBuffer();
+        int len = KeyString.length();
+        for (int i = 0; i < length; i++) {
+            sb.append(KeyString.charAt((int) Math.round(Math.random() * (len - 1))));
+        }
+        return sb.toString();
+    }
+    public String genBigData(int index) {
+        String randomString = getRandomString(2000);
+        return String.format("%04d_%s", index, randomString);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,26 +164,37 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         mBtnSend = (Button) findViewById(R.id.btnSend);
         mBtnUnCon = (Button) findViewById(R.id.btnUnConnect);
         mBtnUnReg = (Button) findViewById(R.id.btnUnReg);
+        mBtnSendBig = (Button) findViewById(R.id.btnSendBig);
         mTextInfo = (TextView) findViewById(R.id.textInfo);
+
         // 按钮事件
         mBtnReg.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
                 if (status != STATUS_INIT) {
                     String str = "已经注册过";
                     mTextInfo.setText(str);
                     return;
                 }
 
+                setWorkingStatus(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        status = STATUS_REGISTERED;
                         flySDK.getInstance().flycan_Init(sid, token, appid, mEditNorItem.getText().toString(), flySDK.MODE_P2P_FLYCAN);
                         //flySDK.getInstance().flycan_Init(sid, token, appid, mEditNorItem.getText().toString(), flySDK.MODE_FLYCAN);
                         flySDK.getInstance().flycan_AddCallBack(MainActivity.this);
+                        flySDK.getInstance().flycan_AddIceCallBack(MainActivity.this);
                         flySDK.getInstance().flycan_Register();
-                        status = STATUS_REGISTERED;
+                        setWorkingStatus(false);
+
                     }
                 }).start();
             }
@@ -135,16 +203,24 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
             @Override
             public void onClick(View view) {
                 //if (nSessionId != 0) {
+
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
                 if (status != STATUS_REGISTERED) {
                     String str = "已经创建过会话或未注册";
                     mTextInfo.setText(str);
                     return;
                 }
+                 setWorkingStatus(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        status = STATUS_SESSION_CREATED;
                         nSessionId = com.kct.flycan.sdk.flySDK.getInstance().flycan_CreateSession(0);
-                        Log.e(TAG, "flycan_CreateSession Server id = " + nSessionId);
+                        Log.e(TAG, "flycan_CreateSession session id = " + nSessionId);
 
                         // 延时2秒监听
                         if (nSessionId != 0) {
@@ -153,9 +229,10 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            com.kct.flycan.sdk.flySDK.getInstance().flycan_ListenSession(nSessionId, 5);
+                            com.kct.flycan.sdk.flySDK.getInstance().flycan_ListenSession(nSessionId);
                         }
-                        status = STATUS_SESSION_CREATED;
+                        setWorkingStatus(false);
+
                     }
                 }).start();
             }
@@ -163,17 +240,24 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         mBtnCon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
                 if (status != STATUS_SESSION_CREATED) {
                     String str = "未创建会话或已经在连接中";
                     mTextInfo.setText(str);
                     return;
                 }
-
+                setWorkingStatus(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        com.kct.flycan.sdk.flySDK.getInstance().flycan_ConnectSession(nSessionId, mEditSubItem.getText().toString());
                         status = STATUS_CLIENT;
+                        com.kct.flycan.sdk.flySDK.getInstance().flycan_ConnectSession(nSessionId, mEditSubItem.getText().toString());
+                        setWorkingStatus(false);
                     }
                 }).start();
             }
@@ -181,12 +265,18 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
                 if (status != STATUS_CLIENT && status != STATUS_SERVER) {
                     String str = "未连接";
                     mTextInfo.setText(str);
                     return;
                 }
-
+                setWorkingStatus(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -205,17 +295,94 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                                 }
                             }
                         }
+                        setWorkingStatus(false);
                     }
                 }).start();
             }
         });
-        mBtnUnCon.setOnClickListener(new View.OnClickListener() {
+        mBtnSendBig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
+                if (status != STATUS_CLIENT && status != STATUS_SERVER) {
+                    String str = "未连接";
+                    mTextInfo.setText(str);
+                    return;
+                }
+                setWorkingStatus(true);
+                if (runningBigData) {
+                    //stop running
+                    runningBigData = false;
+                    mBtnSendBig.setText(R.string.app_text_btn_send_big);
+                    setWorkingStatus(false);
+                    return;
+                }
+                runningBigData = true;
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        if (nMaxChannal > 0) {
+
+                            //String szData = "Only you can love me! count:" + counter++;
+                            int index = 0;
+                            sendMessageStartSendingBigData();
+                            while (runningBigData && index++ < BIG_DATA_COUNT) {
+                                String szData = genBigData(index);
+                                int channel = 0;
+                                if (flySDK.getInstance().needIce()) {
+                                    channel = flySDK.CHANNEL_ID_AUTO;
+                                }
+                                if (bClient) {
+                                    com.kct.flycan.sdk.flySDK.getInstance().flycan_Send(nSessionId, szData.getBytes(), szData.length(), channel);
+                                } else {
+                                    for (int i = 0; i < mSessionList.size(); i++) {
+                                        com.kct.flycan.sdk.flySDK.getInstance().flycan_Send(mSessionList.get(i), szData.getBytes(), szData.length(), channel);
+                                    }
+                                }
+                                sendMessageSendBigData(channel, index, szData);
+                                try {
+                                    Thread.sleep(5);
+                                } catch (InterruptedException e) {
+                                    Log.e(TAG, "InterruptedException", e);
+                                }
+                            }
+                            //complete sending big data
+                            runningBigData = false;
+
+                            sendMessageStopSendingBigData();
+
+                        }
+
+                    }
+                }).start();
+                setWorkingStatus(false);
+            }
+        });
+
+        mBtnUnCon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
+                if (status != STATUS_CLIENT && status != STATUS_SERVER && status != STATUS_SESSION_CREATED) {
+                    String str = "未创建会话";
+                    mTextInfo.setText(str);
+                    return;
+                }
+                setWorkingStatus(true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        status = STATUS_REGISTERED;
                         //if (bClient) {
                             if (nSessionId != 0) {
                                 com.kct.flycan.sdk.flySDK.getInstance().flycan_ReleaseSession(nSessionId);
@@ -231,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                             }
                             mSessionList.clear();
                         //}
-                        status = STATUS_REGISTERED;
+                        setWorkingStatus(false);
                     }
                 }).start();
             }
@@ -240,23 +407,38 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
 
             @Override
             public void onClick(View view) {
+                if (workingStatus) {
+                    String str = "正在处理中，请稍候";
+                    mTextInfo.setText(str);
+                    return;
+                }
+
                 if (status == STATUS_CLIENT || status == STATUS_SERVER ) {
                     String str = "请先断连";
                     mTextInfo.setText(str);
                     return;
                 }
+
+                setWorkingStatus(true);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        status = STATUS_INIT;
                         com.kct.flycan.sdk.flySDK.getInstance().flycan_UnRegister();
                         com.kct.flycan.sdk.flySDK.getInstance().flycan_UnInit();
                         com.kct.flycan.sdk.flySDK.getInstance().flycan_RemoveCallBack(MainActivity.this);
-                        status = STATUS_INIT;
+                        com.kct.flycan.sdk.flySDK.getInstance().flycan_RemoveIceCallBack(MainActivity.this);
+                        setWorkingStatus(false);
                     }
                 }).start();
 
             }
         });
+    }
+
+    public void setWorkingStatus(boolean workingStatus) {
+        Log.i(TAG, "set working status:" + workingStatus);
+        this.workingStatus = workingStatus;
     }
 
     @Override
@@ -265,16 +447,17 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         mHandler.sendEmptyMessage(nEvent);
         // 分析事件
         if (nEvent == EVT_SESSION_INCOMING) {
+            status = STATUS_SERVER;
             nMaxChannal = nCode;
             int nSession = ByteUtil.Byte2Int(pData);
             bClient = false;
             // 接收会话
-            com.kct.flycan.sdk.flySDK.getInstance().flycan_AcceptSession(nSession, objs);
+            com.kct.flycan.sdk.flySDK.getInstance().flycan_AcceptSession(nSession);
 
             mSessionList.add(nSession);
             // 拒绝会话
             //com.kct.flycan.sdk.flySDK.flycan_RejectSession(nSession);
-            status = STATUS_SERVER;
+
         }
         if (nEvent == EVT_SESSION_ACCEPT) {
             nMaxChannal = nCode;
@@ -295,8 +478,26 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
         Bundle bundle = new Bundle();
         bundle.putInt("channal", nChannalId);
         bundle.putString("data", strTmp);
-        Message msg = mHandler.obtainMessage(10000);
+        Message msg = mHandler.obtainMessage(MSG_RECEIVING_DATA);
         msg.setData(bundle);
+        mHandler.sendMessage(msg);
+    }
+
+    public void sendMessageSendBigData(int nChannalId, int index, String data) {
+        Message msg = mHandler.obtainMessage(MSG_START_SENDING_BIG_DATA);
+        Bundle bundle = new Bundle();
+        bundle.putString("data", data);
+        bundle.putInt("index", index);
+        bundle.putInt("channal", nChannalId);
+        mHandler.sendMessage(msg);
+    }
+    public void sendMessageStartSendingBigData() {
+        Message msg = mHandler.obtainMessage(MSG_START_SENDING_BIG_DATA);
+        mHandler.sendMessage(msg);
+    }
+
+    public void sendMessageStopSendingBigData() {
+        Message msg = mHandler.obtainMessage(MSG_STOP_SENDING_BIG_DATA);
         mHandler.sendMessage(msg);
     }
 
@@ -352,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                 String str = "会话连接被拒绝";
                 mTextInfo.setText(str);
             }
-            if (msg.what == 10000) {
+            if (msg.what == MSG_RECEIVING_DATA) {
                 Bundle bundle = msg.getData();
                 if (bundle != null) {
                     int nChannal = bundle.getInt("channal");
@@ -361,6 +562,54 @@ public class MainActivity extends AppCompatActivity implements OnflyListener{
                     mTextInfo.setText(str);
                 }
             }
+            if (msg.what == MSG_SEND_BIG_DATA) {
+                Bundle bundle = msg.getData();
+                if (bundle != null) {
+                    int index = bundle.getInt("index");
+                    int nChannal = bundle.getInt("channel");
+                    String data = bundle.getString("data");
+                    String str = "发送数据  channel= " + nChannal + "index = " + index + " data = " + data;
+                    mTextInfo.setText(str);
+                }
+            }
+            if (msg.what == MSG_START_SENDING_BIG_DATA) {
+                mBtnSendBig.setText(R.string.app_text_btn_send_big_stop);
+            }
+            if (msg.what == MSG_STOP_SENDING_BIG_DATA) {
+                mBtnSendBig.setText(R.string.app_text_btn_send_big);
+            }
+
         }
     };
+
+    @Override
+    public void onRxData(int sessionId, int compid, byte[] data, String sourceaddr) {
+        //do nothing, since CallBackRecv is also called
+    }
+
+    @Override
+    public void onIceCompleted(int sessionId, int op, int status) {
+        int nettype = NetUtils.getNetWorkState(this);
+        String nettypeName = NetUtils.getNetWorkStateById(nettype);
+        Log.i(TAG, "onIceCompleted, op=" + op + ",status=" + status + ",nettype=" + nettype + ",nettypeName=" + nettypeName);
+    }
+
+    @Override
+    public void onNatDetected(int status, int nattype) {
+        int nettype = NetUtils.getNetWorkState(this);
+        String nettypeName = NetUtils.getNetWorkStateById(nettype);
+        Log.i(TAG, "onNatDetected, nattype=" + nattype + ",status=" + status + ",nettype=" + nettype + ",nettypeName=" + nettypeName);
+
+    }
+
+    @Override
+    public void punchOnResult(int sessionId, int status) {
+        //do nothing
+    }
+
+    @Override
+    public void onNotifyPeer(int sessionId, byte[] data) {
+        Log.i(TAG, "onNotifyPeer, data=" + new String(data));
+
+    }
 }

@@ -10,6 +10,8 @@
     <string name="app_text_btn_crt">create session</string>
     <string name="app_text_btn_con">connect session</string>
     <string name="app_text_btn_send">send data</string>
+    <string name="app_text_btn_send_big">send big data</string>
+    <string name="app_text_btn_send_big_stop">stop sending</string>
     <string name="app_text_btn_uncon">disconnect session</string>
     <string name="app_text_btn_unreg">unregister</string>
 </resources>
