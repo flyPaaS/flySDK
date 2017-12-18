@@ -24,7 +24,7 @@ gradle assembleDebug
 ## flycan接入流程
 
 请参见文档：
-[flyCAN 开发者接入手册1.1.docx](https://github.com/flyPaaS/flyAPI/raw/master/Rest/doc/flyCAN\ 开发者接入手册1.1.docx)
+[flyCAN 开发者接入手册1.1.docx](https://github.com/flyPaaS/flyAPI/raw/master/Rest/doc/flyCAN%20开发者接入手册1.1.docx)
 
 
 ## flySDK使用流程
