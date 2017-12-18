@@ -1,6 +1,6 @@
 # flyCAN SDK和示例
 
-本项目包括flyCAN SDK库(sdk-release.aar)以及一个简单的使用示例。
+本项目包括flyCAN SDK库(sdk-debug.aar)以及一个简单的使用示例。
 
 ## 编译过程
 
@@ -24,7 +24,7 @@ gradle assembleDebug
 ## flycan接入流程
 
 请参见文档：
-[flyCAN 开发者接入手册1.1.docx](https://github.com/flyPaaS/flyAPI/raw/master/Rest/doc/flyCAN 开发者接入手册1.1.docx)
+[flyCAN 开发者接入手册1.1.docx]("https://github.com/flyPaaS/flyAPI/raw/master/Rest/doc/flyCAN 开发者接入手册1.1.docx")
 
 
 ## flySDK使用流程
