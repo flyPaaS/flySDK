@@ -10,7 +10,7 @@
 #define AppHeaders_h
 
 #import "flycan.h"
-
+#import "UdpPackItem.h"
 
 
 #endif /* AppHeaders_h */

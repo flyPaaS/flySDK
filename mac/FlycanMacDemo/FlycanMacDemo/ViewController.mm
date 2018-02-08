@@ -1,30 +1,31 @@
 //
 //  ViewController.m
-//  KCT_flycan_Demo
+//  FlycanMacDemo
 //
-//  Created by KCMac on 2017/8/24.
+//  Created by KCMac on 2017/10/13.
 //  Copyright © 2017年 flypass. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "HttpRequestEngine.h"
 #include <pthread.h>
 #include <sys/time.h>
+#include "CircleBuf.h"
 
+#pragma pack(1)
 struct UdpPackHeader {
+    double timeSp;
     int seq;
     int check;
-    double timeSp;
     int bodyLen;
 };
-
+#pragma pack()
 
 #define kCallSdkId  @"callsdkid"
 #define kCalledSdkId @"calledsdkid"
 #define kMaxSessionNum  1
+//#define kTcpConnect
 
-
-@interface ViewController ()
+@interface ViewController ()<flycanDelegate>
 {
     flycan *flyEngin;
     BOOL isSend;
@@ -36,13 +37,14 @@ struct UdpPackHeader {
     
     int sendNum;
     int timerNum;
+    
+    CCircleBuf *m_pTalkAudioBuf;
 }
 
-@property(nonatomic,weak)IBOutlet UITextField *call;
-@property(nonatomic,weak)IBOutlet UITextField *called;
-@property(nonatomic,weak)IBOutlet UITextView *statueLabel;
-@property(nonatomic,weak)IBOutlet UITextField *bufferLabel;
-@property(nonatomic,weak)IBOutlet UILabel *conStateLabel;
+@property(nonatomic,weak)IBOutlet NSTextField *call;
+@property(nonatomic,weak)IBOutlet NSTextField *called;
+@property(nonatomic,weak)IBOutlet NSTextView *statueLabel;
+@property(nonatomic,weak)IBOutlet NSTextField *conStateLabel;
 @property(atomic,assign) BOOL running;
 @property(nonatomic,strong) NSMutableArray *packArray;
 
@@ -51,10 +53,9 @@ struct UdpPackHeader {
 @implementation ViewController
 
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     showString = [[NSMutableString alloc] init];
     sessionArray = [[NSMutableArray alloc] init];
     self.packArray = [NSMutableArray arrayWithCapacity:1000];
@@ -69,33 +70,31 @@ struct UdpPackHeader {
     NSString *token = @"980e7daebdf7fc4aa6f55bda74b41d17";
     NSString *appid = @"47201f1d7bd043c18069375172f82572";
     
-    self.call.text = @"62395051197521";
-    self.called.text = @"62395051197520";
+    self.call.stringValue = @"62395051197520";
+    self.called.stringValue = @"62395051197521";
 #else
     NSString *accountSid = @"b64e977c108810429b9056208059d362";
     NSString *token = @"cd1e4ce88775dcaf8bbf9236e9811c4a";
     NSString *appid = @"57993353d8724285904ba22a20d51ee9";
     
-    self.call.text = @"62508051197251";//62395051197525
-    self.called.text = @"62508051197250";
+    self.call.stringValue = @"62508051197250";
+    self.called.stringValue = @"62508051197251";
 #endif
-    
     
     flyEngin = [[flycan alloc] init];
     flyEngin.delegate = self;
     
-    NSString *sdkid = self.call.text;
+    NSString *sdkid = self.call.stringValue;
+    NSString *peerid = self.called.stringValue;
     
     [flyEngin flycanInit:accountSid token:token appid:appid sdkid:sdkid];
     
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *bufMax = [defaults objectForKey:@"maxBuffer"];
-    self.bufferLabel.text = [bufMax stringValue];
-    
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendTimer) userInfo:nil repeats:YES];
     [timer fire];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    m_pTalkAudioBuf = new CCircleBuf();
+    m_pTalkAudioBuf->Create(1024*1024);
+    // Do any additional setup after loading the view.
 }
 
 
@@ -122,7 +121,8 @@ struct UdpPackHeader {
         isServier = YES;
         _newSessionId = [flyEngin flycanAcceptSession:sessionId];
         showText = [NSString stringWithFormat:@"收到 sessionId: %d 的请求连接\n",sessionId];
-        int *ptr = param;
+        //int *ptr = reinterpret_cast<int *>(param);
+        int *ptr = (int *)param;
         NSLog(@"channel number is %d",*ptr);
         //[flyEngin flycan_reject_session:session];
     }
@@ -152,32 +152,70 @@ struct UdpPackHeader {
     }
 }
 
+
 - (void)flyTran:(int)sessionId direct:(int)direct
 {
     if (direct == 1)
     {
-        self.conStateLabel.text = @"直连";
+        self.conStateLabel.stringValue = @"直连";
     }
     else
     {
-        self.conStateLabel.text = @"中转";
+        self.conStateLabel.stringValue = @"中转";
     }
+}
+
+static void *TcpRecvDataThread(void *param)
+{
+    ViewController *selfPtr = (__bridge ViewController *)param;
+    while (1) {
+        int unReadSize = selfPtr->m_pTalkAudioBuf->GetStock();
+        if (unReadSize >= 1024) {
+            char header[24] = {0};
+            char buff[1024] = {0};
+            UdpPackHeader *udpHeader;
+            int headerSize = sizeof(UdpPackHeader);
+            int nRead = selfPtr->m_pTalkAudioBuf->Read((char*)header, headerSize);
+            udpHeader = (UdpPackHeader *)header;
+            
+            double timeSp = getTickCount();
+            double times = timeSp - udpHeader->timeSp;
+            if (times >= 2000) {
+                NSLog(@"超时了 %f",times);
+            } else {
+                if (udpHeader->check == 1010) {
+                    UdpPackItem *item = [selfPtr.packArray objectAtIndex:udpHeader->seq];
+                    item.recvTimeSp = getTickCount();
+                    item.isRecv = YES;
+                    //printf("------seq  %d\n",header->seq);
+                }
+            }
+            int bodyLen = udpHeader->bodyLen;
+            nRead = selfPtr->m_pTalkAudioBuf->Read((char*)buff, bodyLen);
+            
+        }
+    }
+    return NULL;
 }
 
 
 - (void)flycanRecv:(int)sessionId buf:(void *)buf len:(int)len channelIndxe:(int)channelIndxe
 {
+    
+#ifdef kTcpConnect
+    if(0 == m_pTalkAudioBuf->Write(buf, (int)len))
+    {
+        m_pTalkAudioBuf->Reset();
+        m_pTalkAudioBuf->Write(buf, (int)len);
+    }
+#else
     struct UdpPackHeader *header = (struct UdpPackHeader *)buf;
     double timeSp = getTickCount();
     double times = timeSp - header->timeSp;
-    if (times >= 2000)
-    {
+    if (times >= 2000) {
         NSLog(@"超时了 %f",times);
-    }
-    else
-    {
-        if (header->check == 1010)
-        {
+    } else {
+        if (header->check == 1010) {
             UdpPackItem *item = [_packArray objectAtIndex:header->seq];
             item.recvTimeSp = getTickCount();
             item.isRecv = YES;
@@ -185,99 +223,15 @@ struct UdpPackHeader {
         }
     }
     
-    //printf("----------%d  \n",header->seq);
-    //recvNum++;
-    //NSLog(@"------recv times :%d---- ",recvNum);
-    //NSLog(@"sessionId :%d recv data len:%d channelIndex:%d",sessionId,len,channelIndxe);
+    NSData *data1 =  [NSData dataWithBytes:buf length:len];
+    [self->flyEngin flycanSend:sessionId data:data1 len:data1.length channelIndex:channelIndxe];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *showText = [NSString stringWithFormat:@"recv pack len:%d\n",len];
         //printf("recv %s\n",buf);
-        //[self updateState:showText];
+        [self updateState:showText];
     });
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)login:(id)sender {
-
-    [flyEngin flycanRegister];
-    NSString *showText = [NSString stringWithFormat:@"beed login...\n"];
-    [self updateState:showText];
-}
-
-
-- (IBAction)connect:(id)sender {
-    
-    for (int i = 0; i < kMaxSessionNum; i++) {
-        NSNumber *num = [sessionArray objectAtIndex:i];
-        int sid = [num intValue];
-        //[flyEngin flycanConnectServer:sid ip:@"192.168.0.247" port:8800];
-        [flyEngin flycanConnectSession:sid peerId:self.called.text];
-        //[flyEngin flycanConnectServer:sid ip:@"114.112.83.110" port:29099];
-        //[flyEngin flycanConnectServer:sid ip:@"192.168.0.196" port:29099];
-        
-    }
-    //[flyEngin flycanConnectSession:_sessionId peerId:self.called.text];
-#ifdef kTestEnvironment
-    
-    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.145" port:8800];
-#else
-    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:9099];
-    
 #endif
-    
-    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:29099];
-    
-    NSString *showText = [NSString stringWithFormat:@"连接成功\n"];
-    [self updateState:showText];
-}
-
-- (IBAction)disconnect:(id)sender {
-    isSend = NO;
-    //[flyEngin flycanReleaseSession:_sessionId];
-    for (int i = 0; i < kMaxSessionNum; i++) {
-        NSNumber *num = [sessionArray objectAtIndex:i];
-        int sid = [num intValue];
-        [flyEngin flycanReleaseSession:sid];
-    }
-    NSString *showText = [NSString stringWithFormat:@"断开连接\n"];
-    [self updateState:showText];
-    
-    [self performSelector:@selector(printLost) withObject:nil afterDelay:0.5];
-}
-
-- (IBAction)unRegister:(id)sender {
-    [flyEngin flycanUnRegister];
-}
-
-- (IBAction)eixt:(id)sender {
-    exit(0);
-}
-
-
-
-- (IBAction)sendData:(id)sender {
-#if 0
-    NSString *str = @"flycan Sdk";
-    NSData *data =  [str dataUsingEncoding:NSUTF8StringEncoding];
-    int sendSessionId = _sessionId;
-    if (isServier) {
-        sendSessionId = _newSessionId;
-    }
-
-    [flyEngin flycanSend:sendSessionId data:data len:data.length channelIndex:0];
-    NSString *showText = [NSString stringWithFormat:@"send buffer: %@ sessionId: %d\n",str,sendSessionId];
-    [self updateState:showText];
-#endif
-    isSend = YES;
-    sendNum = 0;
-    self.running = YES;
-    pthread_t udpSendDataThreadId;
-    pthread_create(&udpSendDataThreadId, NULL, UdpSendDataThread, (__bridge void *)self);
     
 }
 
@@ -309,11 +263,14 @@ static NSTimeInterval getTickCount() {
     return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void *UdpSendDataThread(void *param)
+
+
+
+static void *UdpSendDataThread(void *param)
 {
     ViewController *selfPtr = (__bridge ViewController *)param;
-    NSString *strBuf = selfPtr.bufferLabel.text;
-    int max = [strBuf intValue];
+    
+    int max = 1024;
     
     while (selfPtr->isSend)
     {
@@ -332,8 +289,9 @@ void *UdpSendDataThread(void *param)
                         struct UdpPackHeader *packHeader = (struct UdpPackHeader *)buffer;
                         packHeader->seq = selfPtr->sendNum;
                         packHeader->check = 1010;
+                        int bydyLen = 1024 - sizeof(UdpPackHeader);
+                        packHeader->bodyLen = bydyLen;
                         packHeader->timeSp = getTickCount();
-                        packHeader->bodyLen = 1024 - sizeof(packHeader);
                         UdpPackItem *packItem = [selfPtr.packArray objectAtIndex:selfPtr->sendNum];
                         packItem.isRecv = NO;
                         packItem.sendTimeSp = getTickCount();
@@ -364,10 +322,9 @@ void *UdpSendDataThread(void *param)
 
 - (void)updateState:(NSString *)context {
     [showString appendString:context];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.statueLabel.text = showString;
-    });
+    self.statueLabel.string = showString;
 }
+
 
 -(void)initArray
 {
@@ -415,22 +372,97 @@ void *UdpSendDataThread(void *param)
     
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(NSTextField *)textField {
     [textField resignFirstResponder];
-    if (textField.tag == 1000)
-    {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if (textField.text.length > 0)
-        {
-            NSString *strNum = textField.text;
-            int iNum = [strNum intValue];
-            NSNumber *defaultNum = [NSNumber numberWithInt:iNum];
-            [defaults setObject:defaultNum forKey:@"maxBuffer"];
-            [defaults synchronize];
-        }
-        
-    }
     return YES;
 }
+
+- (void)setRepresentedObject:(id)representedObject {
+    [super setRepresentedObject:representedObject];
+
+    // Update the view, if already loaded.
+}
+
+- (IBAction)registerAccount:(id)sender {
+    
+    [flyEngin flycanRegister];
+    NSString *showText = [NSString stringWithFormat:@"beed login...\n"];
+    [self updateState:showText];
+}
+
+
+- (IBAction)connect:(id)sender {
+    for (int i = 0; i < kMaxSessionNum; i++) {
+        NSNumber *num = [sessionArray objectAtIndex:i];
+        int sid = [num intValue];
+        //[flyEngin flycanConnectServer:sid ip:@"192.168.0.247" port:8800];
+        [flyEngin flycanConnectSession:sid peerId:self.called.stringValue];
+        //[flyEngin flycanConnectServer:sid ip:@"114.112.83.110" port:29099];
+        //[flyEngin flycanConnectServer:sid ip:@"192.168.0.202" port:29099];
+        
+    }
+    //[flyEngin flycanConnectSession:_sessionId peerId:self.called.text];
+#ifdef kTestEnvironment
+    
+    //[flyEngin flycanConnectServer:_sessionId ip:@"192.168.0.145" port:8800];
+#else
+    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:9099];
+    
+#endif
+    
+    //[flyEngin flycanConnectServer:_sessionId ip:@"114.112.83.110" port:29099];
+    
+    NSString *showText = [NSString stringWithFormat:@"连接成功\n"];
+    [self updateState:showText];
+}
+
+- (IBAction)disconnect:(id)sender {
+    isSend = NO;
+    //[flyEngin flycanReleaseSession:_sessionId];
+    for (int i = 0; i < kMaxSessionNum; i++) {
+        NSNumber *num = [sessionArray objectAtIndex:i];
+        int sid = [num intValue];
+        [flyEngin flycanReleaseSession:sid];
+    }
+    NSString *showText = [NSString stringWithFormat:@"断开连接\n"];
+    [self updateState:showText];
+    
+    [self performSelector:@selector(printLost) withObject:nil afterDelay:0.5];
+}
+
+- (IBAction)unRegister:(id)sender {
+    [flyEngin flycanUnRegister];
+    //exit(0);
+}
+
+- (IBAction)sendData:(id)sender {
+    
+#if 0
+    NSString *str = @"flycan Sdk";
+    NSData *data =  [str dataUsingEncoding:NSUTF8StringEncoding];
+    int sendSessionId = _sessionId;
+    if (isServier) {
+        sendSessionId = _newSessionId;
+    }
+    
+    [flyEngin flycanSend:sendSessionId data:data len:data.length channelIndex:0];
+    NSString *showText = [NSString stringWithFormat:@"send buffer: %@ sessionId: %d\n",str,sendSessionId];
+    [self updateState:showText];
+#endif
+    
+    isSend = YES;
+    sendNum = 0;
+    self.running = YES;
+    pthread_t udpSendDataThreadId;
+    pthread_create(&udpSendDataThreadId, NULL,UdpSendDataThread, (__bridge void *)self);
+    
+    
+#ifdef kTcpConnect
+    pthread_t tcpRecvDataThreadId;
+    pthread_create(&tcpRecvDataThreadId, NULL, TcpRecvDataThread, (__bridge void *)self);
+#endif
+    
+}
+
 
 @end

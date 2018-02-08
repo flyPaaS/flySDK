@@ -12,15 +12,15 @@
 		5A35DC671F66920900360FFE /* TimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC641F66920900360FFE /* TimeUtil.m */; };
 		5A35DC6E1F6694CA00360FFE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC6B1F6694CA00360FFE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5A35DC6F1F6694CA00360FFE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DC6D1F6694CA00360FFE /* README.md */; };
+		5A3E63C2202866CF00D582CC /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4EB0361F4EEDBE00083295 /* libflycan.a */; };
 		5A4EB01D1F4ECDBE00083295 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB01C1F4ECDBE00083295 /* main.m */; };
 		5A4EB0201F4ECDBE00083295 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB01F1F4ECDBE00083295 /* AppDelegate.m */; };
 		5A4EB0231F4ECDBE00083295 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EB0221F4ECDBE00083295 /* ViewController.m */; };
 		5A4EB0261F4ECDBE00083295 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0241F4ECDBE00083295 /* Main.storyboard */; };
 		5A4EB0281F4ECDBE00083295 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0271F4ECDBE00083295 /* Assets.xcassets */; };
 		5A4EB02B1F4ECDBE00083295 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4EB0291F4ECDBE00083295 /* LaunchScreen.storyboard */; };
-		5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4EB0361F4EEDBE00083295 /* libflycan.a */; };
 		5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4FFB851F56B11400F841BC /* libstdc++.tbd */; };
-		5A6A9DC11FA873B600139294 /* libflycan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6A9DC01FA873B600139294 /* libflycan.a */; };
+		5AE8F31D1FC287F800C3892C /* UdpPackItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8F31C1FC287F800C3892C /* UdpPackItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +50,8 @@
 		5A4EB03A1F4EEE9E00083295 /* AppHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppHeaders.h; sourceTree = "<group>"; };
 		5A4FFB851F56B11400F841BC /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		5A6A9DC01FA873B600139294 /* libflycan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libflycan.a; sourceTree = "<group>"; };
+		5AE8F31B1FC287F800C3892C /* UdpPackItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UdpPackItem.h; sourceTree = "<group>"; };
+		5AE8F31C1FC287F800C3892C /* UdpPackItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UdpPackItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A3E63C2202866CF00D582CC /* libflycan.a in Frameworks */,
 				5A4FFB861F56B11400F841BC /* libstdc++.tbd in Frameworks */,
-				5A4EB0371F4EEDBE00083295 /* libflycan.a in Frameworks */,
-				5A6A9DC11FA873B600139294 /* libflycan.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +128,7 @@
 		5A4EB01A1F4ECDBE00083295 /* KCT_flycan_Demo */ = {
 			isa = PBXGroup;
 			children = (
+				5AE8F31A1FC287A700C3892C /* Models */,
 				5A35DC681F6694CA00360FFE /* Third-party */,
 				5A35DC5D1F66920000360FFE /* Common */,
 				5A4EB0381F4EEE1B00083295 /* Config */,
@@ -192,6 +194,15 @@
 				5A6A9DC01FA873B600139294 /* libflycan.a */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		5AE8F31A1FC287A700C3892C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5AE8F31B1FC287F800C3892C /* UdpPackItem.h */,
+				5AE8F31C1FC287F800C3892C /* UdpPackItem.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AE8F31D1FC287F800C3892C /* UdpPackItem.m in Sources */,
 				5A35DC651F66920900360FFE /* DataEncryption.m in Sources */,
 				5A4EB0231F4ECDBE00083295 /* ViewController.m in Sources */,
 				5A35DC671F66920900360FFE /* TimeUtil.m in Sources */,
